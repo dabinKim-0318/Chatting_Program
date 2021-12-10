@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ChatProgram">
 
     <Button
         android:id="@+id/bt_connect"
@@ -29,14 +29,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="메시지 입력"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toBottomOf="@+id/bt_connect"
         app:layout_constraintEnd_toStartOf="@+id/bt_send"
         app:layout_constraintStart_toEndOf="@+id/bt_connect"
         app:layout_constraintTop_toTopOf="@+id/bt_connect" />
 
-    <TextView
+    <EditText
         android:id="@+id/tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
