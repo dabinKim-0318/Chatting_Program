@@ -7,7 +7,10 @@ import android.util.Log
 import com.example.chatting_program.databinding.ActivityMain2Binding
 import com.example.chatting_program.databinding.ActivityUpupBinding
 import java.io.IOException
-import java.net.Socket
+import android.R.string.no
+import java.net.*
+import java.util.*
+
 
 class Upup : AppCompatActivity() {
     lateinit var binding: ActivityUpupBinding
@@ -26,12 +29,33 @@ class Upup : AppCompatActivity() {
             }
         }
         initNetwork2(this, binding, handler).start()
+
+        Log.d("My Ip Address is ", getLocalIpAddress()!!);
     }
 
-    companion object {
-        const val IP = "192.168.80.1"
-        const val PORT = 8789
+    fun getLocalIpAddress(): String? {
+        try {
+            val en: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
+            while (en.hasMoreElements()) {
+                val intf: NetworkInterface = en.nextElement()
+                val enumIpAddr: Enumeration<InetAddress> = intf.getInetAddresses()
+                while (enumIpAddr.hasMoreElements()) {
+                    val inetAddress: InetAddress = enumIpAddr.nextElement()
+                    if (!inetAddress.isLoopbackAddress() && inetAddress is Inet4Address) {
+                        return inetAddress.getHostAddress()
+                    }
+                }
+            }
+        } catch (ex: SocketException) {
+            ex.printStackTrace()
+        }
+        return null
     }
+
+/*    companion object {
+        const val IP = "192.168.55.71"
+        const val PORT = 9877
+    }*/
 }
 
 class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val handler: Handler) {
@@ -43,7 +67,7 @@ class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val 
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    socket = Socket("192.168.80.1", 8789)
+                    socket = Socket("192.168.0.8", 8765)
                     receive()
                 } catch (e: Exception) {
                     Log.d("소켓전송 실패", "실패")
