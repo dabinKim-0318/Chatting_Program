@@ -5,15 +5,23 @@ import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import com.example.chatting_program.databinding.ActivityMain2Binding
+import com.example.chatting_program.databinding.ActivityUpupBinding
 import java.io.IOException
-import java.net.Socket
+import android.R.string.no
+import androidx.core.content.ContentProviderCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.chatting_program.databinding.ActivityChattingBinding
+import com.example.chatting_program.recycler.MessageData
+import java.net.*
+import java.util.*
+
 
 class ChatProgram : AppCompatActivity() {
-    lateinit var binding: ActivityMain2Binding
+    lateinit var binding: ActivityChattingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMain2Binding.inflate(layoutInflater)
+        binding = ActivityChattingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val handler = object : Handler(Looper.getMainLooper()) {
@@ -24,26 +32,22 @@ class ChatProgram : AppCompatActivity() {
                 }
             }
         }
-        initNetwork(this, binding, handler).start()
+        start()
+        initAdapter()
     }
 
-    companion object {
-        const val IP = "192.168.80.1"
-        const val PORT = 8789
-    }
-}
 
-class initNetwork(val context: Activity, binding: ActivityMain2Binding, val handler: Handler) {
     var connect = false
-    var binding: ActivityMain2Binding
     var socket: Socket? = null
+    val messageList = mutableListOf<MessageData>()
+    lateinit var handler: Handler
 
     // 클라이언트 프로그램 동작 메소드
     fun startClient(IP: String, port: Int) {
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    socket = Socket("192.168.80.1", 8789)
+                    socket = Socket("192.168.80.1", 8765)
                     receive()
                 } catch (e: Exception) {
                     Log.d("소켓전송 실패", "실패")
@@ -112,7 +116,7 @@ class initNetwork(val context: Activity, binding: ActivityMain2Binding, val hand
             if (connect == false) {
                 try {
                     startClient(MainActivity.IP, MainActivity.PORT)
-                    binding.tvMessage.setText("[채팅방 접속]")
+                    binding.tvMessage.setText("[채팅방 접속]\n")
                     binding.btConnect.setText("종료하기")
                     connect = true
                 } catch (e: Exception) {
@@ -129,12 +133,20 @@ class initNetwork(val context: Activity, binding: ActivityMain2Binding, val hand
         //보내기 버튼 누르면 send실행
         binding.btSend.setOnClickListener {
             send(binding.etInput.getText().toString() + "\n")
+            messageList.add(MessageData(binding.etInput.text.toString(), 1))
             //     binding.tvMessage.append(":"+binding.etInput.text+"\n")
             binding.etInput.setText("")
+
         }
     }
 
-    init {
-        this.binding = binding
+    fun initAdapter() {
+        val adapter = ChatProgramAdapter(messageList)
+        binding.rvContainer.adapter = adapter
+        binding.rvContainer.layoutManager = LinearLayoutManager(this)
+
+        adapter.notifyDataSetChanged()
     }
+
+
 }

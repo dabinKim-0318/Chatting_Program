@@ -67,7 +67,7 @@ class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val 
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    socket = Socket("192.168.0.8", 8765)
+                    socket = Socket("192.168.80.1", 8765)
                     receive()
                 } catch (e: Exception) {
                     Log.d("소켓전송 실패", "실패")
