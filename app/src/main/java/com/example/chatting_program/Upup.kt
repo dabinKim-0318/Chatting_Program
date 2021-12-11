@@ -52,10 +52,6 @@ class Upup : AppCompatActivity() {
         return null
     }
 
-/*    companion object {
-        const val IP = "192.168.55.71"
-        const val PORT = 9877
-    }*/
 }
 
 class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val handler: Handler) {
@@ -67,7 +63,7 @@ class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val 
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    socket = Socket("192.168.80.1", 8765)
+                    socket = Socket("211.205.151.190", 8765)
                     receive()
                 } catch (e: Exception) {
                     Log.d("소켓전송 실패", "실패")
@@ -137,14 +133,14 @@ class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val 
                 try {
                     startClient(MainActivity.IP, MainActivity.PORT)
                     binding.tvMessage.setText("[채팅방 접속]\n")
-                    binding.btConnect.setText("종료하기")
+               //     binding.btConnect.setText("종료하기")
                     connect = true
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             } else {
                 binding.tvMessage.append("[채팅방 종료]")
-                binding.btConnect.setText("접속하기")
+              //  binding.btConnect.setText("접속하기")
                 connect = false
                 stopClient()
             }
@@ -158,3 +154,5 @@ class initNetwork2(val context: Activity, val binding: ActivityUpupBinding, val 
         }
     }
 }
+
+

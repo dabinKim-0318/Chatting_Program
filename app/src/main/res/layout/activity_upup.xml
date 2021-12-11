@@ -4,83 +4,207 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context=".Upup">
 
-    <Button
-        android:id="@+id/bt_connect"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/rectangle_gray"
-        android:text="접속"
-        android:textColor="@color/white"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/et_input"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/ic_3dot"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Smart 더바른 치과"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
 
     <Button
         android:id="@+id/bt_send"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/rectangle_gray"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="10dp"
+        android:background="#00000000"
         android:text="전송"
         android:textColor="@color/white"
-        android:textSize="14dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/et_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/et_input" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@id/line">
 
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="28dp"
-            android:background="@null"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_chat"
+                android:layout_width="300dp"
+                android:layout_height="240dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/rectangle_sopt_radius_5"
+                android:paddingEnd="30dp"
+                app:flow_firstVerticalBias="0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@null"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_chat"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/tv_chat"
+                app:layout_constraintTop_toBottomOf="@+id/tv_chat" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_chat"
+                app:layout_constraintEnd_toStartOf="@+id/tv_chat"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_chat"
+                app:srcCompat="@drawable/bot2"
+                android:layout_marginBottom="180dp"/>
+
+            <TextView
+                android:id="@+id/tv_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:text="  안녕하세요. 더바른 치과입니다.\n원하시는 진료과목을 선택해주세요."
+                app:layout_constraintEnd_toEndOf="@+id/tv_chat"
+                app:layout_constraintStart_toStartOf="@+id/tv_chat"
+                app:layout_constraintTop_toTopOf="@+id/tv_chat" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingStart="80dp"
+                android:paddingEnd="80dp"
+                android:paddingBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="구강내과"
+                android:background="@drawable/bg_radius3"
+                app:layout_constraintEnd_toEndOf="@+id/tv_introduce"
+                app:layout_constraintStart_toStartOf="@+id/tv_introduce"
+                app:layout_constraintTop_toBottomOf="@+id/tv_introduce" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="교정과"
+                android:layout_marginTop="3dp"
+                android:paddingTop="10dp"
+                android:background="@drawable/bg_radius3"
+                android:paddingStart="86dp"
+                android:paddingEnd="86dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/textView3"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="소아치과"
+                android:paddingTop="10dp"
+                android:paddingStart="80dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/bg_radius3"
+                android:paddingEnd="80dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 
     <TextView
         android:id="@+id/tv_image"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:background="#F2F2F2"
+        android:background="@drawable/bg_bottom2"
         app:layout_constraintBottom_toBottomOf="@+id/bt_connect"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bt_connect" />
+
+    <Button
+        android:id="@+id/bt_connect"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/airplane"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/et_input"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/et_input"
         android:layout_width="270dp"
         android:layout_height="0dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="22dp"
         android:background="@drawable/bg_input"
         android:hint="내용을 입력하세요"
         android:paddingStart="20dp"
         android:paddingEnd="110dp"
         android:textColorHint="#D0D0D0"
         android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_connect"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_image"
         app:layout_constraintEnd_toEndOf="@+id/bt_send"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/bt_connect"
-        app:layout_constraintTop_toTopOf="@+id/bt_connect" />
+        app:layout_constraintTop_toTopOf="@+id/tv_image" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
