@@ -4,26 +4,20 @@ import android.app.Activity
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import com.example.chatting_program.databinding.ActivityMain2Binding
 import com.example.chatting_program.databinding.ActivityUpupBinding
 import java.io.IOException
-import android.R.string.no
-import androidx.core.content.ContentProviderCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chatting_program.databinding.ActivityChattingBinding
-import com.example.chatting_program.recycler.MessageData
 import java.net.*
-import java.util.*
 
 
 class ChatProgram : AppCompatActivity() {
-    lateinit var binding: ActivityChattingBinding
+    lateinit var binding: ActivityUpupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChattingBinding.inflate(layoutInflater)
+        binding = ActivityUpupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //메인쓰레드에서 UI를 그리기 위해 handler 사용
         val handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 val msg = msg.data.getString("msg")
@@ -32,23 +26,23 @@ class ChatProgram : AppCompatActivity() {
                 }
             }
         }
-        start()
-        initAdapter()
+        initNetwork(this, binding, handler).start()
     }
+}
 
-
+class initNetwork(val context: Activity, val binding: ActivityUpupBinding, val handler: Handler) {
     var connect = false
     var socket: Socket? = null
-    val messageList = mutableListOf<MessageData>()
-    lateinit var handler: Handler
 
-    // 클라이언트 프로그램 동작 메소드
-    fun startClient(IP: String, port: Int) {
+    // 클라이언트 프로그램 시작
+    fun clientOn(IPaddress: String, port: Int) {
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    socket = Socket("192.168.80.1", 8765)
-                    receive()
+                    socket = Socket(
+                        IPaddress, port
+                    )
+                    receiveMsg()
                 } catch (e: Exception) {
                     Log.d("소켓전송 실패", "실패")
                     e.printStackTrace()
@@ -58,8 +52,8 @@ class ChatProgram : AppCompatActivity() {
         thread.start()
     }
 
-    // 클라이언트 프로그램 종료 메소드
-    fun stopClient() {
+    // 클라이언트 프로그램 종료
+    fun clientOff() {
         try {
             if (socket != null && !socket!!.isClosed) {
                 socket!!.close()
@@ -69,16 +63,17 @@ class ChatProgram : AppCompatActivity() {
         }
     }
 
-    // 서버로부터 메세지를 전달받는 메소드
-    fun receive() {
+    // 메시지 받기
+    fun receiveMsg() {
         while (true) {
             try {
                 val input = socket!!.getInputStream()
-                val buffer = ByteArray(512)
-                val length = input.read(buffer)
-                if (length == -1) throw IOException()
-                val message = String(buffer, 0, length, charset("UTF-8"))
+                val buf = ByteArray(512)
+                val leng = input.read(buf)
+                if (leng == -1) throw IOException()
+                val message = String(buf, 0, leng, charset("UTF-8"))
 
+                //handler 호출
                 val msg: Message = handler.obtainMessage()
                 val bundle = Bundle()
                 bundle.putString("msg", message)
@@ -87,23 +82,23 @@ class ChatProgram : AppCompatActivity() {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                stopClient()
+                clientOff()
                 break
             }
         }
     }
 
-    // 서버로 메세지를 전송하는 메소드
-    fun send(message: String) {
+    // 메시지 보내기
+    fun sendMsg(msg: String) {
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
                     val out = socket!!.getOutputStream()
-                    val buffer: ByteArray = message.toByteArray(charset("UTF-8"))
-                    out.write(buffer)
+                    val buf: ByteArray = msg.toByteArray(charset("UTF-8"))
+                    out.write(buf)
                     out.flush()
                 } catch (e: Exception) {
-                    stopClient()
+                    clientOff()
                 }
             }
         }
@@ -113,40 +108,29 @@ class ChatProgram : AppCompatActivity() {
     fun start() {
         //접속 클릭하면 startClient 실행
         binding.btConnect.setOnClickListener {
+            binding.btConnect.toggle()
             if (connect == false) {
                 try {
-                    startClient(MainActivity.IP, MainActivity.PORT)
-                    binding.tvMessage.setText("[채팅방 접속]\n")
-                    binding.btConnect.setText("종료하기")
+                    clientOn("211.205.151.190", 8765)
+                    binding.tvMessage.setText("<상담시작>\n")
+                    //     binding.btConnect.setText("종료하기")
                     connect = true
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             } else {
-                binding.tvMessage.append("[채팅방 종료]")
-                binding.btConnect.setText("접속하기")
+                binding.tvMessage.append("<상담종료>")
                 connect = false
-                stopClient()
+                clientOff()
             }
         }
 
-        //보내기 버튼 누르면 send실행
+        //전송 버튼 누르면 send실행
         binding.btSend.setOnClickListener {
-            send(binding.etInput.getText().toString() + "\n")
-            messageList.add(MessageData(binding.etInput.text.toString(), 1))
-            //     binding.tvMessage.append(":"+binding.etInput.text+"\n")
+            sendMsg(binding.etInput.getText().toString() + "\n")
             binding.etInput.setText("")
-
         }
     }
-
-    fun initAdapter() {
-        val adapter = ChatProgramAdapter(messageList)
-        binding.rvContainer.adapter = adapter
-        binding.rvContainer.layoutManager = LinearLayoutManager(this)
-
-        adapter.notifyDataSetChanged()
-    }
-
-
 }
+
+
